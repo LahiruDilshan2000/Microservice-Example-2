@@ -1,0 +1,47 @@
+package com.example.microservice.customer.service.impl;
+
+import com.example.microservice.customer.Repository.CustomerRepository;
+import com.example.microservice.customer.entity.Customer;
+import com.example.microservice.customer.record.CustomerRequest;
+import com.example.microservice.customer.record.FraudCheckResponse;
+import com.example.microservice.customer.service.CustomerService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+
+@Service
+@RequiredArgsConstructor
+public class CustomerServiceImpl implements CustomerService {
+
+    private final CustomerRepository customerRepository;
+    private final RestTemplate restTemplate;
+
+    @Override
+    public ResponseEntity<?> registerCustomer(CustomerRequest request) {
+
+        Customer customer = Customer.builder()
+                .email(request.email())
+                .firstName(request.firstName())
+                .lastName(request.lastName())
+                .build();
+
+        customerRepository.saveAndFlush(customer);
+
+        FraudCheckResponse fraudCheckResponse = restTemplate.getForObject(
+                "http://FRAUD/api/v1/fraud-check/{customerId}",
+                FraudCheckResponse.class,
+                customer.getId()
+        );
+
+        if (fraudCheckResponse.isFraudster())
+            throw new IllegalStateException("fraudster");
+
+
+        return new ResponseEntity<>(
+                "Customer registered successfully",
+                HttpStatus.OK
+        );
+    }
+}
