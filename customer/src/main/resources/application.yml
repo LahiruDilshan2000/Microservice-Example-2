@@ -35,3 +35,6 @@ spring:
 #    fetch-registry: true
 #    register-with-eureka: true
 #    eureka-server-port: 8761
+#application:
+#  config:
+#    fraud-url: http://localhost:8081/api/v1/fraud-check

@@ -23,7 +23,9 @@ spring:
 #    user: ${spring.datasource.username}
 #    password: ${spring.datasource.password}
 
-
+application:
+  config:
+    fraud-url: http://localhost:8081/api/v1/fraud-check
 
 
 #eureka:
