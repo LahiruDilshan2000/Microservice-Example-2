@@ -17,7 +17,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler({CustomException.class})
     public ResponseEntity<String> handle(CustomException ex){
         return ResponseEntity
-                .status(HttpStatus.NOT_FOUND)
+                .status(HttpStatus.BAD_REQUEST)
                 .body(ex.getMessage());
     }
 

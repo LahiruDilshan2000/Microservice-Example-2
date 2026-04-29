@@ -7,6 +7,7 @@ import com.example.microservice.customer.record.CustomerRequest;
 import com.example.microservice.customer.record.FraudCheckResponse;
 import com.example.microservice.customer.service.CustomerService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,7 @@ import static java.lang.String.format;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class CustomerServiceImpl implements CustomerService {
 
     private final CustomerRepository customerRepository;
@@ -44,7 +46,8 @@ public class CustomerServiceImpl implements CustomerService {
                 customer.getId()
         );
 
-        if (fraudCheckResponse.isFraudster())
+        if (fraudCheckResponse == null || fraudCheckResponse.isFraudster())
+//            throw new CustomException("Fraud::");
             throw new IllegalStateException("fraudster");
 
 
