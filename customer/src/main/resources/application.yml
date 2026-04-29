@@ -5,6 +5,8 @@ spring:
     import: optional:configserver:http://localhost:8888
   application:
     name: customer
+
+
 #  datasource:
 #    password: 1234
 #    url: jdbc:postgresql://localhost:5432/customer

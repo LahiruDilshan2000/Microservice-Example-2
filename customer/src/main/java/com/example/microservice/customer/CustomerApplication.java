@@ -10,7 +10,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 //@EnableFeignClients(
 //        basePackages = "com.example.microservice.customer"
 //)
-//@EnableJpaAuditing
+@EnableJpaAuditing
 public class CustomerApplication {
     public static void main(String[] args) {
         SpringApplication.run(CustomerApplication.class, args);

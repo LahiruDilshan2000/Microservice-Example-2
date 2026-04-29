@@ -13,6 +13,7 @@ services:
     networks:
       - postgres
     restart: unless-stopped
+
   pgadmin:
     container_name: pgadmin
     image: dpage/pgadmin4
@@ -27,92 +28,177 @@ services:
     networks:
       - postgres
     restart: unless-stopped
-#  zipkin:
-#    image: openzipkin/zipkin
-#    container_name: zipkin
-#    ports:
-#      - "9411:9411"
-#    networks:
-#      - spring
-#  rabbitmq:
-#    image: rabbitmq:3.9.11-management-alpine
-#    container_name: rabbitmq
-#    ports:
-#      - "5672:5672"
-#      - "15672:15672"
-#    networks:
-#      - spring
-#  eureka-server:
-#    image: amigoscode/eureka-server:latest
-#    container_name: eureka-server
-#    ports:
-#      - "8761:8761"
-#    environment:
-#      - SPRING_PROFILES_ACTIVE=docker
-#    networks:
-#      - spring
-#    depends_on:
-#      - zipkin
-#  apigw:
-#    image: amigoscode/apigw:latest
-#    container_name: apigw
-#    ports:
-#      - "8083:8083"
-#    environment:
-#      - SPRING_PROFILES_ACTIVE=docker
-#    networks:
-#      - spring
-#    depends_on:
-#      - zipkin
-#      - eureka-server
-#  customer:
-#    image: amigoscode/customer:latest
-#    container_name: customer
-#    ports:
-#      - "8080:8080"
-#    environment:
-#      - SPRING_PROFILES_ACTIVE=docker
-#    networks:
-#      - spring
-#      - postgres
-#    depends_on:
-#      - zipkin
-#      - postgres
-#      - rabbitmq
-#  fraud:
-#    image: amigoscode/fraud:latest
-#    container_name: fraud
-#    ports:
-#      - "8081:8081"
-#    environment:
-#      - SPRING_PROFILES_ACTIVE=docker
-#    networks:
-#      - spring
-#      - postgres
-#    depends_on:
-#      - zipkin
-#      - postgres
-#      - rabbitmq
-#  notification:
-#    image: amigoscode/notification:latest
-#    container_name: notification
-#    ports:
-#      - "8082:8082"
-#    environment:
-#      - SPRING_PROFILES_ACTIVE=docker
-#    networks:
-#      - spring
-#      - postgres
-#    depends_on:
-#      - zipkin
-#      - postgres
-#      - rabbitmq
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    container_name: zookeeper
+    environment:
+      ZOOKEEPER_SERVER_ID: 1
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - "22181:2181"
+    networks:
+      - microservices-net
+
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    container_name: ms_kafka
+    ports:
+      - 9092:9092
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+    networks:
+      - microservices-net
+
+  mail-dev:
+    container_name: ms-mail-dev
+    image: maildev/maildev
+    ports:
+      - 1080:1080
+      - 1025:1025
+
 networks:
   postgres:
     driver: bridge
-#  spring:
-#    driver: bridge
+  microservices-net:
+    driver: bridge
 
 volumes:
   postgres:
   pgadmin:
+
+
+
+#services:
+#  postgres:
+#    container_name: postgres
+#    image: postgres
+#    environment:
+#      POSTGRES_USER: user
+#      POSTGRES_PASSWORD: 1234
+#      PGDATA: /data/postgres
+#    volumes:
+#      - postgres:/data/postgres
+#    ports:
+#      - "5432:5432"
+#    networks:
+#      - postgres
+#    restart: unless-stopped
+#  pgadmin:
+#    container_name: pgadmin
+#    image: dpage/pgadmin4
+#    environment:
+#      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-pgadmin4@pgadmin.org}
+#      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
+#      PGADMIN_CONFIG_SERVER_MODE: 'False'
+#    volumes:
+#      - pgadmin:/var/lib/pgadmin
+#    ports:
+#      - "5050:80"
+#    networks:
+#      - postgres
+#    restart: unless-stopped
+##  zipkin:
+##    image: openzipkin/zipkin
+##    container_name: zipkin
+##    ports:
+##      - "9411:9411"
+##    networks:
+##      - spring
+##  rabbitmq:
+##    image: rabbitmq:3.9.11-management-alpine
+##    container_name: rabbitmq
+##    ports:
+##      - "5672:5672"
+##      - "15672:15672"
+##    networks:
+##      - spring
+##  eureka-server:
+##    image: amigoscode/eureka-server:latest
+##    container_name: eureka-server
+##    ports:
+##      - "8761:8761"
+##    environment:
+##      - SPRING_PROFILES_ACTIVE=docker
+##    networks:
+##      - spring
+##    depends_on:
+##      - zipkin
+##  apigw:
+##    image: amigoscode/apigw:latest
+##    container_name: apigw
+##    ports:
+##      - "8083:8083"
+##    environment:
+##      - SPRING_PROFILES_ACTIVE=docker
+##    networks:
+##      - spring
+##    depends_on:
+##      - zipkin
+##      - eureka-server
+##  customer:
+##    image: amigoscode/customer:latest
+##    container_name: customer
+##    ports:
+##      - "8080:8080"
+##    environment:
+##      - SPRING_PROFILES_ACTIVE=docker
+##    networks:
+##      - spring
+##      - postgres
+##    depends_on:
+##      - zipkin
+##      - postgres
+##      - rabbitmq
+##  fraud:
+##    image: amigoscode/fraud:latest
+##    container_name: fraud
+##    ports:
+##      - "8081:8081"
+##    environment:
+##      - SPRING_PROFILES_ACTIVE=docker
+##    networks:
+##      - spring
+##      - postgres
+##    depends_on:
+##      - zipkin
+##      - postgres
+##      - rabbitmq
+##  notification:
+##    image: amigoscode/notification:latest
+##    container_name: notification
+##    ports:
+##      - "8082:8082"
+##    environment:
+##      - SPRING_PROFILES_ACTIVE=docker
+##    networks:
+##      - spring
+##      - postgres
+##    depends_on:
+##      - zipkin
+##      - postgres
+##      - rabbitmq
+#networks:
+#  postgres:
+#    driver: bridge
+#  #  spring:
+#  #    driver: bridge
+#
+##  mail-dev:
+##    container_name: ms-mail-dev
+##    image: maildev/maildev
+##    ports:
+##      - 1080:1080
+##      - 1025:1025
+#
+#volumes:
+#  postgres:
+#  pgadmin:

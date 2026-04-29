@@ -4,8 +4,10 @@ import com.example.microservice.customer.Repository.CustomerRepository;
 import com.example.microservice.customer.entity.Customer;
 import com.example.microservice.customer.exception.CustomException;
 import com.example.microservice.customer.feign.FraudClient;
+import com.example.microservice.customer.kafka.CustomerProducer;
 import com.example.microservice.customer.record.CustomerRequest;
 import com.example.microservice.customer.record.FraudCheckResponse;
+import com.example.microservice.customer.record.CustomerConfirmation;
 import com.example.microservice.customer.service.CustomerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,6 +15,8 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+
+import java.time.LocalDateTime;
 
 import static java.lang.String.format;
 import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
@@ -26,13 +30,14 @@ public class CustomerServiceImpl implements CustomerService {
     private final CustomerRepository customerRepository;
     private final RestTemplate restTemplate;
     private final FraudClient fraudClient;
+    private final CustomerProducer customerProducer;
 
     @Override
     public ResponseEntity<?> registerCustomer(CustomerRequest request) {
 
-        if(customerRepository.existsByEmail(request.email())){
+        if (customerRepository.existsByEmail(request.email())) {
             throw new CustomException(
-                   format("Email already exist:: %s", request.email())
+                    format("Email already exist:: %s", request.email())
             );
         }
 
@@ -56,6 +61,15 @@ public class CustomerServiceImpl implements CustomerService {
         if (fraudCheckResponse.isFraudster())
             throw new CustomException("Customer is fraudster!");
 
+        // send customer successfully register confirmation
+        customerProducer.checkFraudConfirmation(
+                new CustomerConfirmation(
+                        customer.getEmail(),
+                        customer.getFirstName(),
+                        LocalDateTime.now()
+                )
+        );
+
         return new ResponseEntity<>(
                 "Customer registered successfully",
                 HttpStatus.OK
@@ -76,7 +90,8 @@ public class CustomerServiceImpl implements CustomerService {
         HttpEntity<Void> requestEntity = new HttpEntity<>(headers);
 
         ParameterizedTypeReference<FraudCheckResponse> responseType =
-                new ParameterizedTypeReference<FraudCheckResponse>() {};
+                new ParameterizedTypeReference<FraudCheckResponse>() {
+                };
 
         ResponseEntity<FraudCheckResponse> response = restTemplate.exchange(
                 "http://FRAUD/api/v1/fraud-check/{customerId}",
@@ -87,9 +102,9 @@ public class CustomerServiceImpl implements CustomerService {
                 id
         );
 
-        if (response.getStatusCode().isError()){
+        if (response.getStatusCode().isError()) {
             throw new CustomException("An error occurred while checking the customer fraud:: " + response.getStatusCode());
         }
-        return  response.getBody();
+        return response.getBody();
     }
 }

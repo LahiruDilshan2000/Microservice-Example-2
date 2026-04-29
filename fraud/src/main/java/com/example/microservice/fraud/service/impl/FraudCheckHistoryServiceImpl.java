@@ -1,7 +1,9 @@
 package com.example.microservice.fraud.service.impl;
 
 import com.example.microservice.fraud.entity.FraudCheckHistory;
+import com.example.microservice.fraud.notification.NotificationProducer;
 import com.example.microservice.fraud.record.FraudCheckResponse;
+import com.example.microservice.fraud.record.RegisterNotificationRequest;
 import com.example.microservice.fraud.repository.FraudCheckHistoryRepository;
 import com.example.microservice.fraud.service.FraudCheckHistoryService;
 import lombok.RequiredArgsConstructor;
@@ -17,18 +19,30 @@ import java.util.Map;
 public class FraudCheckHistoryServiceImpl implements FraudCheckHistoryService {
 
     private final FraudCheckHistoryRepository fraudCheckHistoryRepository;
+    private final NotificationProducer notificationProducer;
 
     public ResponseEntity<?> isFraudulentCustomer(Integer customerId) {
 
-        fraudCheckHistoryRepository.save(
+        FraudCheckHistory fraudCheckHistory = fraudCheckHistoryRepository.save(
                 FraudCheckHistory.builder()
                         .customerId(customerId)
                         .createdAt(LocalDateTime.now())
                         .isFraudster(false)
                         .build()
         );
+
+        // send fraud customer notification
+        notificationProducer.sendNotification(
+                new RegisterNotificationRequest(
+                        customerId,
+                        fraudCheckHistory.getIsFraudster(),
+                        fraudCheckHistory.getCreatedAt()
+
+                )
+        );
+
         return new ResponseEntity<>(
-                new FraudCheckResponse(false),
+                new FraudCheckResponse(fraudCheckHistory.getIsFraudster()),
                 HttpStatus.OK
         );
     }
