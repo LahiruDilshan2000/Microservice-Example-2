@@ -1,23 +1,28 @@
-server:
-  port: 8080
+#server:
+#  port: 8080
 spring:
+  config:
+    import: optional:configserver:http://localhost:8888
   application:
     name: customer
-  datasource:
-    password: 1234
-    url: jdbc:postgresql://localhost:5432/customer
-    username: user
-  jpa:
-    hibernate:
-      ddl-auto: create-drop
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
-        format_sql: true
-    show-sql: true
-eureka:
-  client:
-    service-url:
-      defaultZone: http://localhost:8761/eureka
-    fetch-registry: true
-    register-with-eureka: true
+#  datasource:
+#    password: 1234
+#    url: jdbc:postgresql://localhost:5432/customer
+#    username: user
+#  jpa:
+#    hibernate:
+#      ddl-auto: create-drop
+#    properties:
+#      hibernate:
+#        dialect: org.hibernate.dialect.PostgreSQLDialect
+#        format_sql: true
+#    show-sql: true
+#eureka:
+#  instance:
+#    hostname: localhost
+#  client:
+#    service-url:
+#      defaultZone: http://${eureka.instance.hostname}:${eureka.client.eureka-server-port}/eureka
+#    fetch-registry: true
+#    register-with-eureka: true
+#    eureka-server-port: 8761
