@@ -13,6 +13,6 @@ import java.util.Optional;
 )
 public interface FraudClient {
 
-    @GetMapping(path = {"{customerId}"})
+    @GetMapping(path = {"{customerId, email}"})
     Optional<FraudCheckResponse> isFraudster(@PathVariable("customerId") Integer customerId);
 }

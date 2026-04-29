@@ -1,6 +1,6 @@
 package com.example.microservice.fraud.notification;
 
-import com.example.microservice.fraud.record.RegisterNotificationRequest;
+import com.example.microservice.fraud.record.FraudConfirmation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -15,12 +15,12 @@ import static org.springframework.kafka.support.KafkaHeaders.TOPIC;
 @Slf4j
 public class NotificationProducer {
 
-    private final KafkaTemplate<String, RegisterNotificationRequest> kafkaTemplate;
+    private final KafkaTemplate<String, FraudConfirmation> kafkaTemplate;
 
-    public void sendNotification(RegisterNotificationRequest registerNotificationRequest){
-        log.info("Sending notification fraudster body <{}>", registerNotificationRequest);
-        Message<RegisterNotificationRequest> message = MessageBuilder
-                .withPayload(registerNotificationRequest)
+    public void sendNotification(FraudConfirmation fraudConfirmation){
+        log.info("Sending notification fraudster body <{}>", fraudConfirmation);
+        Message<FraudConfirmation> message = MessageBuilder
+                .withPayload(fraudConfirmation)
                 .setHeader(TOPIC, "fraud-topic")
                 .build();
         kafkaTemplate.send(message);

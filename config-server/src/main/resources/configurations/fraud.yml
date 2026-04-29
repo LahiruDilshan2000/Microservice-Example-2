@@ -19,7 +19,7 @@ spring:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
       properties:
-        spring.json.type.mapping: registerNotificationRequest:com.example.microservice.fraud.record.RegisterNotificationRequest
+        spring.json.type.mapping: fraudConfirmation:com.example.microservice.fraud.record.FraudConfirmation
 
 #eureka:
 #  instance:

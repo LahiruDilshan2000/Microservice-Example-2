@@ -4,5 +4,5 @@ import org.springframework.http.ResponseEntity;
 
 public interface FraudCheckHistoryService {
 
-    public ResponseEntity<?> isFraudulentCustomer(Integer customerId);
+    ResponseEntity<?> isFraudulentCustomer(Integer customerId, String email);
 }

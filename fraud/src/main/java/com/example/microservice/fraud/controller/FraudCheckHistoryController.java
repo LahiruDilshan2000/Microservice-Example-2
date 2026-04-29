@@ -15,8 +15,9 @@ public class FraudCheckHistoryController {
 
     private final FraudCheckHistoryService fraudCheckHistoryService;
 
-    @GetMapping(path = {"{customerId}"})
-    public ResponseEntity<?> isFraudster(@PathVariable("customerId") Integer customerId){
-        return fraudCheckHistoryService.isFraudulentCustomer(customerId);
+    @GetMapping(path = {"{customerId}", "{email}"})
+    public ResponseEntity<?> isFraudster(@PathVariable("customerId") Integer customerId,
+                                         @PathVariable("email") String email){
+        return fraudCheckHistoryService.isFraudulentCustomer(customerId, email);
     }
 }

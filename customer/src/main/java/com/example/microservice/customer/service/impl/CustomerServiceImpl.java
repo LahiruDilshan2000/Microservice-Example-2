@@ -64,8 +64,10 @@ public class CustomerServiceImpl implements CustomerService {
         // send customer successfully register confirmation
         customerProducer.checkFraudConfirmation(
                 new CustomerConfirmation(
+                        customer.getId(),
                         customer.getEmail(),
                         customer.getFirstName(),
+                        customer.getLastName(),
                         LocalDateTime.now()
                 )
         );
