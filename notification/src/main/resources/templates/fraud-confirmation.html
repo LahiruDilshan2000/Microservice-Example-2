@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Fraud Check Result</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f8;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 40px auto;
+            background: #ffffff;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .header {
+            text-align: center;
+            padding: 25px;
+            color: white;
+        }
+
+        .success {
+            background: #4CAF50;
+        }
+
+        .warning {
+            background: #e53935;
+        }
+
+        .content {
+            padding: 30px;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .info-box {
+            background: #f9fafb;
+            border-left: 4px solid #4CAF50;
+            padding: 15px;
+            margin: 20px 0;
+        }
+
+        .info-box-danger {
+            border-left: 4px solid #e53935;
+        }
+
+        .footer {
+            text-align: center;
+            font-size: 13px;
+            color: #777;
+            padding: 20px;
+            background: #f1f1f1;
+        }
+
+        .highlight {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- Dynamic header color -->
+    <div class="header"
+         th:classappend="${isFraudster} ? ' warning' : ' success'">
+        <h1 th:text="${isFraudster} ? 'Fraud Risk Detected ⚠️' : 'Fraud Check Passed ✅'">
+            Fraud Check Result
+        </h1>
+    </div>
+
+    <div class="content">
+
+        <p>Hello,</p>
+
+        <!-- Dynamic message -->
+        <p th:if="${!isFraudster}">
+            Good news! Your account has successfully passed our fraud verification process.
+        </p>
+
+        <p th:if="${isFraudster}">
+            Our system has flagged this account during the fraud verification process.
+            Please contact support for further clarification.
+        </p>
+
+        <!-- Info box -->
+        <div class="info-box"
+             th:classappend="${isFraudster} ? ' info-box-danger' : ''">
+
+            <p>
+                <strong>Email:</strong>
+                <span th:text="${customerEmail}">customer@example.com</span>
+            </p>
+
+            <p>
+                <strong>Checked At:</strong>
+                <span th:text="${registerDateTime}">2026-04-29 18:30:00</span>
+            </p>
+
+            <p>
+                <strong>Status:</strong>
+                <span class="highlight"
+                      th:text="${isFraudster} ? 'Flagged as Fraud Risk' : 'Verified - No Fraud Detected'">
+                    Status
+                </span>
+            </p>
+
+        </div>
+
+        <p th:if="${!isFraudster}">
+            You can continue using our services without any restrictions.
+        </p>
+
+        <p th:if="${isFraudster}">
+            If you believe this is a mistake, please reach out to our support team immediately.
+        </p>
+
+        <p>Thank you.</p>
+
+    </div>
+
+    <div class="footer">
+        © 2026 Your Company. All rights reserved.
+    </div>
+
+</div>
+
+</body>
+</html>

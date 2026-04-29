@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Registration Successful</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f8;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 40px auto;
+            background: #ffffff;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .header {
+            background: #4CAF50;
+            color: white;
+            text-align: center;
+            padding: 25px;
+        }
+
+        .content {
+            padding: 30px;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .info-box {
+            background: #f9fafb;
+            border-left: 4px solid #4CAF50;
+            padding: 15px;
+            margin: 20px 0;
+        }
+
+        .footer {
+            text-align: center;
+            font-size: 13px;
+            color: #777;
+            padding: 20px;
+            background: #f1f1f1;
+        }
+
+        .highlight {
+            color: #4CAF50;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1>Registration Successful 🎉</h1>
+    </div>
+
+    <div class="content">
+        <p>Hello <span class="highlight" th:text="${customerName}">Customer Name</span>,</p>
+
+        <p>
+            Your customer registration has been completed successfully.
+            Welcome to our platform!
+        </p>
+
+        <div class="info-box">
+            <p><strong>Name:</strong> <span th:text="${customerName}">John Doe</span></p>
+            <p><strong>Email:</strong> <span th:text="${customerEmail}">john@example.com</span></p>
+            <p><strong>Registration Date & Time:</strong>
+                <span th:text="${registerDateTime}">2026-04-29 18:30:00</span>
+            </p>
+        </div>
+
+        <p>
+            We’re excited to have you with us.
+            If you have any questions, feel free to contact our support team.
+        </p>
+
+        <p>Thank you for registering.</p>
+    </div>
+
+    <div class="footer">
+        © 2026 Your Company. All rights reserved.
+    </div>
+</div>
+
+</body>
+</html>
