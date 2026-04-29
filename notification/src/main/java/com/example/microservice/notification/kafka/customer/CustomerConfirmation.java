@@ -6,7 +6,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
 
 @Embeddable
 @Builder
@@ -18,5 +17,5 @@ public class CustomerConfirmation{
         private String customerEmail;
         private String firstName;
         private String lastName;
-        private LocalDateTime date;
+        private String date;
 }

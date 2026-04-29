@@ -32,7 +32,7 @@ public class EmailService {
     public void sendCustomerSuccessEmail(
             String destinationEmail,
             String customerName,
-            LocalDateTime registerDateTime) throws MessagingException {
+            String registerDateTime) throws MessagingException {
         MimeMessage mimeMessage = mailSender.createMimeMessage();
         MimeMessageHelper messageHelper = new MimeMessageHelper(
                 mimeMessage, MimeMessageHelper.MULTIPART_MODE_RELATED, UTF_8.name());
@@ -64,7 +64,7 @@ public class EmailService {
     public void sendFraudSuccessEmail(
             String destinationEmail,
             Boolean isFraudster,
-            LocalDateTime registerDateTime) throws MessagingException {
+            String registerDateTime) throws MessagingException {
         MimeMessage mimeMessage = mailSender.createMimeMessage();
         MimeMessageHelper messageHelper = new MimeMessageHelper(
                 mimeMessage, MimeMessageHelper.MULTIPART_MODE_RELATED, UTF_8.name());

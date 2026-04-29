@@ -56,7 +56,10 @@ public class CustomerServiceImpl implements CustomerService {
 //                FraudCheckResponse.class,
 //                customer.getId()
 //        );
-        FraudCheckResponse fraudCheckResponse = isCustomerFraudsterByFeign(customer.getId());
+        FraudCheckResponse fraudCheckResponse = isCustomerFraudsterByFeign(
+                customer.getId(),
+                customer.getEmail()
+        );
 
         if (fraudCheckResponse.isFraudster())
             throw new CustomException("Customer is fraudster!");
@@ -68,7 +71,7 @@ public class CustomerServiceImpl implements CustomerService {
                         customer.getEmail(),
                         customer.getFirstName(),
                         customer.getLastName(),
-                        LocalDateTime.now()
+                        LocalDateTime.now().toString()
                 )
         );
 
@@ -78,9 +81,9 @@ public class CustomerServiceImpl implements CustomerService {
         );
     }
 
-    private FraudCheckResponse isCustomerFraudsterByFeign(Integer id) {
+    private FraudCheckResponse isCustomerFraudsterByFeign(Integer id, String email) {
 
-        return this.fraudClient.isFraudster(id)
+        return this.fraudClient.isFraudster(id, email)
                 .orElseThrow(() -> new CustomException("An error occurred while checking the customer fraud::"));
     }
 

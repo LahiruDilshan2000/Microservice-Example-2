@@ -2,7 +2,6 @@ package com.example.microservice.notification.kafka;
 
 import com.example.microservice.notification.email.EmailService;
 import com.example.microservice.notification.entity.Notification;
-import com.example.microservice.notification.enums.NotificationType;
 import com.example.microservice.notification.kafka.customer.CustomerConfirmation;
 import com.example.microservice.notification.kafka.fraud.FraudConfirmation;
 import com.example.microservice.notification.repository.NotificationRepository;
@@ -57,7 +56,6 @@ public class NotificationConsumer {
                         .build()
         );
 
-        ;
         emailService.sendFraudSuccessEmail(
                 fraudConfirmation.getEmail(),
                 fraudConfirmation.getIsFraud(),

@@ -37,7 +37,7 @@ public class FraudCheckHistoryServiceImpl implements FraudCheckHistoryService {
                         customerId,
                         email,
                         fraudCheckHistory.getIsFraudster(),
-                        fraudCheckHistory.getCreatedAt()
+                        fraudCheckHistory.getCreatedAt().toString()
 
                 )
         );

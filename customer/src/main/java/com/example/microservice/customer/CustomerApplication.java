@@ -11,7 +11,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 //        basePackages = "com.example.microservice.customer"
 //)
 @EnableJpaAuditing
-public class CustomerApplication {
+public class    CustomerApplication {
     public static void main(String[] args) {
         SpringApplication.run(CustomerApplication.class, args);
     }

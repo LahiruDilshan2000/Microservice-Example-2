@@ -1,3 +1,5 @@
+server:
+  port: 8040
 spring:
   datasource:
     password: 1234
@@ -5,7 +7,7 @@ spring:
     username: user
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: create-drop
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
@@ -16,8 +18,8 @@ spring:
       bootstrap-servers: localhost:9092
       group-id: customerGroup, fraudGroup
       auto-offset-reset: earliest
-      key-deserializer: org.apache.kafka.common.serialization.StringSerializer
-      value-deserializer: org.springframework.kafka.support.serializer.JsonSerializer
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
       properties:
         spring.json.trusted.packages: '*'
         spring.json.type.mapping: customerConfirmation:com.example.microservice.notification.kafka.customer.CustomerConfirmation,fraudConfirmation:com.example.microservice.notification.kafka.fraud.FraudConfirmation
@@ -36,5 +38,3 @@ spring:
         connectiontimeout: 5000
         timeout: 3000
         writetimeout: 5000
-server:
-  port: 8040

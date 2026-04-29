@@ -14,9 +14,9 @@
         <module>customer</module>
         <module>fraud</module>
         <module>eureka-server</module>
-        <module>apigw</module>
         <module>config-server</module>
         <module>notification</module>
+        <module>gateway</module>
     </modules>
 
     <properties>
