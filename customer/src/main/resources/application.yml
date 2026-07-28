@@ -6,6 +6,15 @@ spring:
   application:
     name: customer
 
+resilience4j:
+  ratelimiter:
+    instances:
+      customerService:
+        limit-for-period: 2 # 2 request per 10 second
+        limit-refresh-period: 10s # 10 second refresh limits
+        timeout-duration: 0s # immidetly reject not allow request without waiting
+
+
 
 #  datasource:
 #    password: 1234

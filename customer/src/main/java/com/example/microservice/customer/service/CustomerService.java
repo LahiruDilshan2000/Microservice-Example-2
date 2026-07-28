@@ -5,4 +5,6 @@ import org.springframework.http.ResponseEntity;
 
 public interface CustomerService {
     ResponseEntity<?> registerCustomer(CustomerRequest customer);
+
+    ResponseEntity<?> getCustomer(String id);
 }

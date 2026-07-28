@@ -81,6 +81,14 @@ public class CustomerServiceImpl implements CustomerService {
         );
     }
 
+    @Override
+    public ResponseEntity<?> getCustomer(String id) {
+        return new ResponseEntity<>(
+                "Get customer details successfully",
+                HttpStatus.OK
+        );
+    }
+
     private FraudCheckResponse isCustomerFraudsterByFeign(Integer id, String email) {
 
         return this.fraudClient.isFraudster(id, email)
