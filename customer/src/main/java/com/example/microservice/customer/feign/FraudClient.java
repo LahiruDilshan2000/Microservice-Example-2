@@ -16,4 +16,7 @@ public interface FraudClient {
     @GetMapping("/{customerId}/{email}")
     Optional<FraudCheckResponse> isFraudster(@PathVariable("customerId") Integer customerId,
                                              @PathVariable("email") String email);
+
+    @GetMapping("/{id}")
+    Optional<FraudCheckResponse> getDetails(@PathVariable("id") Long customerId);
 }

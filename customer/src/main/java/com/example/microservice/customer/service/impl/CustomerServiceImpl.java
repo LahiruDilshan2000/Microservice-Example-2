@@ -13,10 +13,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 import static java.lang.String.format;
 import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
@@ -31,6 +34,7 @@ public class CustomerServiceImpl implements CustomerService {
     private final RestTemplate restTemplate;
     private final FraudClient fraudClient;
     private final CustomerProducer customerProducer;
+    private final FraudService fraudService;
 
     @Override
     public ResponseEntity<?> registerCustomer(CustomerRequest request) {
@@ -88,6 +92,26 @@ public class CustomerServiceImpl implements CustomerService {
                 HttpStatus.OK
         );
     }
+
+    @Override
+    public ResponseEntity<?> getCustomerDetails(Long id) {
+        Optional<FraudCheckResponse> isDetails = fraudService.getDetailsFromFraud(id);
+
+        if (isDetails.isEmpty()){
+            return new ResponseEntity<>(
+                    "User fraud details not found",
+                    HttpStatus.NOT_FOUND
+            );
+        }
+
+        FraudCheckResponse fraudCheckResponse = isDetails.get();
+        return new ResponseEntity<>(
+                "Get customer details successfully",
+                HttpStatus.NOT_FOUND
+        );
+    }
+
+
 
     private FraudCheckResponse isCustomerFraudsterByFeign(Integer id, String email) {
 

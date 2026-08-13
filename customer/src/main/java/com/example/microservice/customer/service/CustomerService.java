@@ -7,4 +7,6 @@ public interface CustomerService {
     ResponseEntity<?> registerCustomer(CustomerRequest customer);
 
     ResponseEntity<?> getCustomer(String id);
+
+    ResponseEntity<?> getCustomerDetails(Long id);
 }

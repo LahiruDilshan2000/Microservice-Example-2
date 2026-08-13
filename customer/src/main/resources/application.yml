@@ -14,6 +14,32 @@ resilience4j:
         limit-refresh-period: 10s # 10 second refresh limits
         timeout-duration: 0s # immidetly reject not allow request without waiting
 
+  circuitbreaker:
+    instances:
+      fraudServiceCircuitBreaker:
+#       Sliding window configuration
+        sliding-window-type: COUNT_BASED
+        sliding-window-size: 6
+        minimum-number-of-calls: 5
+
+#       Failure Threshold
+        failure-rate-threshold: 50
+
+#       Open state configuration
+        wait-duration-in-open-state:  10s
+
+#       Half Open state Configuration
+        permitted-number-of-calls-in-half-open-state: 3
+        max-wait-duration-in-half-open-state: 5s
+        automatic-transition-from-open-to-half-open-enabled: true
+
+        record-exceptions:
+          - java.lang.RuntimeException
+          - java.io.IOException
+          - org.springframework.web.client.HttpServerErrorException
+
+        ignore-exceptions:
+          - java.lang.IllegalArgumentException
 
 
 #  datasource:

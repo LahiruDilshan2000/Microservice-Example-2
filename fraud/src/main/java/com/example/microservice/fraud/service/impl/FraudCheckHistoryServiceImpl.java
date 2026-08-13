@@ -47,4 +47,9 @@ public class FraudCheckHistoryServiceImpl implements FraudCheckHistoryService {
                 HttpStatus.OK
         );
     }
+
+    @Override
+    public ResponseEntity<?> getDetails(Long customerId) {
+        return null;
+    }
 }

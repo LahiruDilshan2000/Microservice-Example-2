@@ -21,9 +21,15 @@ public class CustomerController {
     }
 
     @GetMapping("/{id}")
-    @RateLimiter(name = "customerService", fallbackMethod = "fallbackMethod")
+//    @RateLimiter(name = "customerService", fallbackMethod = "fallbackMethod")
     public ResponseEntity<?> getCustomer(@PathVariable String id){
         return customerService.getCustomer(id);
+    }
+
+    @GetMapping("/details/{id}")
+//    @RateLimiter(name = "customerService", fallbackMethod = "fallbackMethod")
+    public ResponseEntity<?> getCustomerDetails(@PathVariable Long id){
+        return customerService.getCustomerDetails(id);
     }
 
     public ResponseEntity<?> fallbackMethod(String id, Throwable throwable){

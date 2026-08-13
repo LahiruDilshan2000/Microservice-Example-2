@@ -20,4 +20,10 @@ public class FraudCheckHistoryController {
                                          @PathVariable("email") String email){
         return fraudCheckHistoryService.isFraudulentCustomer(customerId, email);
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getDetails(@PathVariable("id") Long customerId){
+        throw new RuntimeException("Fraud service is down");
+//        return fraudCheckHistoryService.getDetails(customerId);
+    }
 }
